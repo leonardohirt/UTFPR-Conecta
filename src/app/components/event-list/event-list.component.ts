@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { EventsService } from '../../services/events.service';
-import { Event } from '../../model/event.model';
+import { EventsService } from '../../../services/events-services';
+import { Event } from '../../../model/event.model';
+import { CommonModule } from '@angular/common';
+import { EventCardComponent } from '../event-card/event-card.component';
 
 @Component({
   selector: 'app-event-list',
-  templateUrl: './event-list.component.html'
+  templateUrl: './event-list.component.html',
+  imports: [CommonModule, EventCardComponent],
 })
 export class EventListComponent implements OnInit {
   events: Event[] = [];
