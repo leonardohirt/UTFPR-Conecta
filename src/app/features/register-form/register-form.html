@@ -1,0 +1,112 @@
+<div class="flex justify-center">
+
+  <img 
+    class="w-780 h-auto object-contain"
+    src="/assets/images/utfpr-main2.png" 
+    alt="Campus da UTFPR"
+  >
+
+</div>
+
+<div class="relative -mt-0 z-10 mb-8">
+
+  <div class="w-full md:max-w-xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+    
+    <div class="p-8 md:p-10">
+  
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Cadastre-se</h1>
+        <p class="text-gray-600 mt-1">Bem-vindo(a) ao UTFPR-Conecta</p>
+      </div>
+  
+      <div class="forms">
+        <form #frm="ngForm" (ngSubmit)="register()" class="flex flex-col gap-4">
+          
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Nome completo</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Digite seu nome completo"
+              [(ngModel)]="name"
+              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+  
+          <div>
+            <label for="id" class="block text-sm font-medium text-gray-700">Identificação</label>
+            
+            <select 
+              name="id" 
+              id="id" 
+              [(ngModel)]="selectType"
+              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="ra">Registro Acadêmico</option>
+              <option value="email">Email</option>
+            </select>
+  
+            <input
+              *ngIf="selectType === 'ra'"
+              type="text"
+              name="ra"
+              placeholder="a1234567"
+              [(ngModel)]="ra"
+              class="mt-2 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+  
+            <input
+              *ngIf="selectType === 'email'"
+              type="email"
+              name="email"
+              placeholder="email@exemplo.com"
+              [(ngModel)]="email"
+              class="mt-2 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+  
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Digite sua senha</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Digite sua Senha"
+              [(ngModel)]="password"
+              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+  
+          <div>
+            <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">Confirme sua senha</label>
+            <input
+              type="password"
+              name="passwordConfirm"
+              placeholder="Confirme sua Senha"
+              [(ngModel)]="passwordConfirm"
+              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+  
+          <button 
+            type="submit"
+            class="w-full py-2 px-4 mt-4 bg-yellow-500 text-black font-semibold rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
+          >
+            Cadastre-se
+          </button>
+  
+        </form>
+      </div>
+  
+      <div class="text-center mt-6 text-sm text-gray-600">
+        <p>
+          Já tem uma conta?
+          <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+            Login
+          </a>
+        </p>
+      </div>
+  
+    </div> 
+  </div>
+
+</div>
