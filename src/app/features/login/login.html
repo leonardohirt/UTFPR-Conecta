@@ -1,1 +1,79 @@
-<p>login works!</p>
+<header> 
+     <app-register-navbar> </app-register-navbar> 
+</header>
+    
+<main>
+
+    <!--Imagem da UTFPR-->
+    <div class="flex justify-center">
+        <img 
+            class="w-780 h-auto object-contain"
+            src="assets/images/utfpr-main2.png" 
+            alt="Campus da UTFPR"
+        >
+    </div>
+
+    
+     <!--Texto Principal-->
+    <div class="relative -mt-0 z-10 mb-8">
+        <div class="w-full md:max-w-xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8 md:p-10">
+
+                <div class="text-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">Login</h1>
+                    <p class="text-gray-600 mt-1">Bem-vindo(a) de volta ao UTFPR-Conecta</p>
+                </div>
+
+                 <!--Form-->
+                 <div class="forms">
+                    <form #frm="ngForm" (ngSubmit)="login()" class="flex flex-col gap-4">
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email ou Registro Acadêmico</label>
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="Digite seu email ou RA"
+                                [(ngModel)]="email"
+                                 class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="senha" class="block text-sm font-medium text-gray-700">Digite sua Senha</label>
+                            <input
+                                type="text"
+                                name="senha"
+                                placeholder="Digite sua senha"
+                                [(ngModel)]="email"
+                                 class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            class="w-full py-2 px-4 mt-4 bg-yellow-500 text-black font-semibold rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
+                            Login
+                        </button>
+          
+                    </form>
+
+                    <!--Texto Inferior-->
+                    <div class="text-center mt-6 text-sm text-gray-600">
+                        <p>Não tem uma conta? 
+                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Cadastre-se</a>
+                        </p>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+     </div>
+
+    
+
+
+</main>
+
+
+
