@@ -1,11 +1,9 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-register-navbar',
-  imports: [],
+  standalone: true, 
   templateUrl: './register-navbar.html',
-  styleUrl: './register-navbar.css',
+  styleUrls: ['./register-navbar.css'], 
 })
-export class RegisterNavbar {
-
-}
+export class RegisterNavbar {}
