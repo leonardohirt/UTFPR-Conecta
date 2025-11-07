@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Button } from '../../shared/button/button';
+import { RegisterNavbar } from '../../core/components/register-navbar/register-navbar';
+import { MainNavbar } from "../../core/components/main-navbar/main-navbar";
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, Button, RegisterNavbar, MainNavbar],
   templateUrl: './register-form.html',
   styleUrl: './register-form.css',
 })
