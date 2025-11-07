@@ -1,0 +1,153 @@
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-10">
+  <div class="w-full max-w-5xl bg-white rounded-2xl shadow p-4">
+    <h1 class="text-2xl font-semibold text-center mb-6">Cadastre um novo evento</h1>
+
+    <!-- Informações Básicas -->
+    <section class="mb-8">
+      <h2 class="text-l font-semibold mb-4">Informações básicas</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nome do Evento *</label>
+          <input
+            type="text"
+            placeholder="Ex: Semana da Tecnologia"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Descrição Completa do Evento *</label>
+          <textarea
+            placeholder="Descreva em detalhes o que acontecerá no evento."
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Imagem/banner do evento *</label>
+          <input
+            type="file"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre o Evento -->
+    <section class="mb-8 border-t pt-6">
+      <h2 class="text-sm font-semibold mb-4">Sobre o evento</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Data *</label>
+          <input type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"  />
+        </div>
+        <div class="flex space-x-2">
+          <div class="flex-1">
+            <label class="block text-sm font-medium mb-1">Hora Início *</label>
+            <input type="time" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"  />
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium mb-1">Hora Fim *</label>
+            <input type="time" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="block text-sm font-medium mb-1">Formato *</span>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2">
+            <input type="radio" name="formato" value="presencial" class="accent-yellow-500" /> Presencial
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="formato" value="online" class="accent-yellow-500" /> Online
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm font-medium mb-1">Local *</label>
+        <input
+          type="text"
+          placeholder="Ex: UTFPR Guarapuava"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+        />
+      </div>
+
+      <div class="mt-4">
+        <span class="block text-sm font-medium mb-1">Categoria *</span>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <label class="flex items-center gap-2">
+            <input type="radio" name="categoria" class="accent-yellow-500" /> Sistemas para Internet
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="categoria" class="accent-yellow-500" /> Engenharia Mecânica
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="categoria" class="accent-yellow-500" /> Engenharia Mecatrônica
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="categoria" class="accent-yellow-500" /> Engenharia Civil
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="categoria" class="accent-yellow-500" /> Eventos Gerais
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inscrições e certificados -->
+    <section class="mb-8 border-t pt-6">
+      <h2 class="text-sm font-semibold mb-4">Inscrições e certificados</h2>
+      <div class="space-y-4">
+        <div>
+          <span class="block text-sm font-medium mb-1">Tipo de inscrição *</span>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="inscricao" class="accent-yellow-500" /> Gratuito
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="inscricao" class="accent-yellow-500" /> Pago
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Limite de vagas</label>
+          <input
+            type="number"
+            placeholder="Ex: 100"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium mb-1">Emite certificado</span>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="certificado" class="accent-yellow-500" /> Sim
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="certificado" class="accent-yellow-500" /> Não
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Botões -->
+    <div class="flex justify-center gap-4 mt-8">
+      <button
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg"
+      >
+        Salvar rascunho
+      </button>
+      <button
+        class="bg-yellow-400 hover:bg-yellow-500 text-white font-medium py-2 px-6 rounded-lg"
+      >
+        Enviar para aprovação
+      </button>
+    </div>
+  </div>
+</div>
+
