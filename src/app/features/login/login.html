@@ -50,18 +50,19 @@
                             />
                         </div>
 
-                        <button 
-                            type="submit" 
-                            class="w-full py-2 px-4 mt-4 bg-yellow-500 text-black font-semibold rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
-                            Login
-                        </button>
+                        <app-button
+                        routerLink="/home"
+                            type="submit"
+                            class="w-full mt-4"
+                            color="primary-yellow" 
+                        > Login</app-button>
           
                     </form>
 
                     <!--Texto Inferior-->
                     <div class="text-center mt-6 text-sm text-gray-600">
                         <p>Não tem uma conta? 
-                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Cadastre-se</a>
+                            <a routerLink="/register" class="font-medium text-blue-600 hover:text-blue-500">Cadastre-se</a>
                         </p>
                     </div>
         

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { RegisterNavbar } from '../register-navbar/register-navbar';
+import { RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { NgFor } from '@angular/common';
 
 
 @Component({
   selector: 'app-main-navbar',
-  imports: [RegisterNavbar, NgIf, NgFor],
+  imports: [RegisterNavbar, NgIf, NgFor, RouterLink],
   templateUrl: './main-navbar.html',
   styleUrl: './main-navbar.css',
 })
