@@ -1,5 +1,5 @@
 <!--Navbar-->
-<app-main-navbar></app-main-navbar>
+<app-register-navbar> </app-register-navbar>
 
 <div class="flex justify-center">
 
@@ -92,7 +92,11 @@
   
         
 
-          <app-button type="submit" color="primary-yellow" class="w-full mt-4"> Cadastre-se</app-button>
+          <app-button 
+          type="submit" 
+          color="primary-yellow" 
+          class="w-full mt-4"> 
+          Cadastre-se</app-button>
   
         </form>
       </div>
@@ -100,7 +104,7 @@
       <div class="text-center mt-6 text-sm text-gray-600">
         <p>
           Já tem uma conta?
-          <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+          <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-500">
             Login
           </a>
         </p>

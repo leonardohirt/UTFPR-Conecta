@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router'; 
+import { RouterOutlet, RouterLink } from '@angular/router'; 
 import { MainNavbar } from './core/components/main-navbar/main-navbar'; 
 import { HomeComponent } from './features/home/home';
 import { Button } from './shared/button/button';
@@ -11,6 +11,7 @@ import { EventForm } from "./features/event-form/event-form";
   standalone: true, 
   imports: [
     RouterOutlet,
+    RouterLink,
     MainNavbar,
     HomeComponent,
     Button,

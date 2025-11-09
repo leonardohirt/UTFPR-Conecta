@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Api } from '../../core/services/api';
 import { FormsModule } from '@angular/forms';
 import { Button } from '../../shared/button/button';
+import { MainNavbar } from '../../core/components/main-navbar/main-navbar';
+
 @Component({
   selector: 'app-event-form',
   standalone: true,
@@ -11,7 +13,8 @@ import { Button } from '../../shared/button/button';
     CommonModule,
     ReactiveFormsModule, 
     FormsModule,
-    Button
+    Button,
+    MainNavbar
   ],
   templateUrl: './event-form.html',
   styleUrls: ['./event-form.css']
