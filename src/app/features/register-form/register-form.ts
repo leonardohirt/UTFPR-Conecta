@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Button } from '../../shared/button/button';
 import { RegisterNavbar } from '../../core/components/register-navbar/register-navbar';
 import { MainNavbar } from "../../core/components/main-navbar/main-navbar";
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 
 @Component({
@@ -21,20 +21,39 @@ export class RegisterForm {
   email: string = '';
   password: string = '';
   passwordConfirm: string = '';
+  showModal: boolean = false;
+  modalMessage: string = '';
+  idValue: string = "";
+
+  
+   constructor(private router: Router) {}
 
   register(): void {
-    if (this.password !== this.passwordConfirm || this.password === '') {
-      alert('As senhas não coincidem ou estão vazias.');
-      return;
-    }
 
-    const idValue =
+     this.idValue =
       this.selectType === 'ra'
         ? `RA: ${this.ra}`
         : `Email: ${this.email}`;
 
-    alert(
-      `Cadastro realizado com sucesso!\nNome: ${this.name}\n${idValue}`
-    );
+    if (!this.password || this.password !== this.passwordConfirm) {
+      this.modalMessage = " As senhas não coincidem ou estão vazias"
+      this.showModal = true;
+      return;
+    }
+    else{
+      this.modalMessage = 
+      `Cadastro realizado com sucesso!\n Nome: ${this.name} \n${this.idValue}`;
+      this.showModal = true;
+
+    }
+   
+  }
+
+  closeModal(): void{
+    this.showModal = false;
+
+     if (this.modalMessage.startsWith("Cadastro realizado")) {
+      this.router.navigate(['login']);
+    }
   }
 }
