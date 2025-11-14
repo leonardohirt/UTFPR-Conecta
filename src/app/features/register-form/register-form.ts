@@ -16,8 +16,6 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class RegisterForm {
   name: string = '';
-  selectType: string = 'ra';
-  ra: string = '';
   email: string = '';
   password: string = '';
   passwordConfirm: string = '';
@@ -29,12 +27,6 @@ export class RegisterForm {
    constructor(private router: Router) {}
 
   register(): void {
-
-     this.idValue =
-      this.selectType === 'ra'
-        ? `RA: ${this.ra}`
-        : `Email: ${this.email}`;
-
     if (!this.password || this.password !== this.passwordConfirm) {
       this.modalMessage = " As senhas não coincidem ou estão vazias"
       this.showModal = true;
@@ -42,7 +34,7 @@ export class RegisterForm {
     }
     else{
       this.modalMessage = 
-      `Cadastro realizado com sucesso!\n Nome: ${this.name} \n${this.idValue}`;
+      `Cadastro realizado com sucesso!\n Nome: ${this.name} \n Email: ${this.email}`;
       this.showModal = true;
 
     }
