@@ -28,6 +28,7 @@ export class EventForm {
     cidade: '',
     estado: ''
   };
+showModal: any;
 
   constructor(private addressService: Api) {}
 
