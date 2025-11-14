@@ -1,7 +1,7 @@
 <!--Navbar-->
 <app-register-navbar> </app-register-navbar>
 
-<div class="flex justify-center">
+<div class="flex justify-center mt-7">
 
   <img 
     class="w-780 h-auto object-contain"
@@ -37,29 +37,8 @@
           </div>
   
           <div>
-            <label for="id" class="block text-sm font-medium text-gray-700">Identificação</label>
-            
-            <select 
-              name="id" 
-              id="id" 
-              [(ngModel)]="selectType"
-              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="ra">Registro Acadêmico</option>
-              <option value="email">Email</option>
-            </select>
-  
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
             <input
-              *ngIf="selectType === 'ra'"
-              type="text"
-              name="ra"
-              placeholder="a1234567"
-              [(ngModel)]="ra"
-              class="mt-2 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-  
-            <input
-              *ngIf="selectType === 'email'"
               type="email"
               name="email"
               placeholder="email@exemplo.com"
