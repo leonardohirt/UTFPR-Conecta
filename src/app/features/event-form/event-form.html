@@ -2,12 +2,12 @@
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10">
   <div class="w-full max-w-5xl bg-white rounded-2xl shadow p-4">
-    <h1 class="text-2xl font-semibold text-center mb-6">Cadastre um novo evento</h1>
+    <h1 class="text-2xl font-semibold text-center mb-6 sm: text-xl">Cadastre um novo evento</h1>
 
     <!-- Informações Básicas -->
     <section class="mb-8">
-      <h2 class="text-l font-semibold mb-4">Informações básicas</h2>
-      <div class="space-y-4">
+      <h2 class="text-l font-semibold mb-4 sm: text-m">Informações básicas</h2>
+      <div class="space-y-4 sm: text-sm">
         <div>
           <label class="block text-sm font-medium mb-1">Nome do Evento *</label>
           <input
@@ -25,18 +25,18 @@
           ></textarea>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-1">Imagem/banner do evento *</label>
+        <div c >
+          <label class="block text-sm font-medium mb-1" >Imagem/banner do evento *</label>
           <input
             type="file"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none sm: text-xs"
           />
         </div>
       </div>
     </section>
 
     <!-- Sobre o Evento -->
-    <section class="mb-8 border-t pt-6">
+    <section class="mb-8 border-t pt-6 sm: text-sm">
       <h2 class="text-sm font-semibold mb-4">Sobre o evento</h2>
       <div class="grid md:grid-cols-2 gap-4">
         <div>
@@ -76,7 +76,7 @@
       placeholder="Digite o CEP"
       [(ngModel)]="cep"
       (blur)="buscarEndereco()"
-      class="w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+      class="w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none sm: w-full"
     />
     <app-button type="button" class="" color="primary-yellow">Buscar</app-button>
   </div>
@@ -85,28 +85,28 @@
     type="text"
     placeholder="Rua"
     [(ngModel)]="endereco.rua"
-    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    class="w-full border border-gray-300 rounded-lg px-3 py-2  focus:ring-2 focus:ring-yellow-500 focus:outline-none"
   />
 
   <input
     type="text"
     placeholder="Bairro"
     [(ngModel)]="endereco.bairro"
-    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    class="w-full border border-gray-300 rounded-lg px-3 py-2  focus:ring-2 focus:ring-yellow-500 focus:outline-none"
   />
 
   <input
     type="text"
     placeholder="Cidade"
     [(ngModel)]="endereco.cidade"
-    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    class="w-full border border-gray-300 rounded-lg px-3 py-2  focus:ring-2 focus:ring-yellow-500 focus:outline-none"
   />
 
   <input
     type="text"
     placeholder="Estado"
     [(ngModel)]="endereco.estado"
-    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    class="w-full border border-gray-300 rounded-lg px-3 py-2  focus:ring-2 focus:ring-yellow-500 focus:outline-none"
   />
 </div>
 
@@ -134,11 +134,11 @@
 
     <!-- Inscrições e certificados -->
     <section class="mb-8 border-t pt-6">
-      <h2 class="text-sm font-semibold mb-4">Inscrições e certificados</h2>
+      <h2 class="text-m font-medium mb-4">Inscrições e certificados</h2>
       <div class="space-y-4">
         <div>
           <span class="block text-sm font-medium mb-1">Tipo de inscrição *</span>
-          <div class="flex gap-4">
+          <div class="flex gap-4 sm: text-sm">
             <label class="flex items-center gap-2">
               <input type="radio" name="inscricao" class="accent-yellow-500" /> Gratuito
             </label>
@@ -153,11 +153,11 @@
           <input
             type="number"
             placeholder="Ex: 100"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none sm: text-sm"
           />
         </div>
 
-        <div>
+        <div class="sm: text-sm">
           <span class="block text-sm font-medium mb-1">Emite certificado</span>
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
@@ -172,13 +172,14 @@
     </section>
 
     <!-- Botões -->
-    <div class="flex justify-center gap-4 mt-8">
+    <div class="flex justify-center gap-4 mt-8  sm: text-m px-3 flex-col ">
       <button
-        class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg"
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg h-12 "
       >
         Salvar rascunho
       </button>
-      <app-button type="button" class="" color="primary-yellow">Enviar para aprovação</app-button>
+      
+      <app-button type="button" class="w-full sm:grow  h-12" color="primary-yellow">Enviar para aprovação</app-button>
     </div>
   </div>
 </div>
