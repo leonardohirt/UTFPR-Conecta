@@ -72,10 +72,12 @@
         
 
           <app-button 
-          type="submit" 
-          color="primary-yellow" 
-          class="w-full mt-4"> 
-          Cadastre-se</app-button>
+  type="submit" 
+  color="primary-yellow" 
+  [disabled]="isSubmitting" 
+  class="w-full mt-4"> 
+  {{ isSubmitting ? 'Cadastrando...' : 'Cadastre-se' }} <!-- Adicione esta lógica -->
+</app-button>
   
         </form>
       </div>

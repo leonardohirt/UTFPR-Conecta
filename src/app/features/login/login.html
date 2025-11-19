@@ -1,80 +1,85 @@
-<header> 
-     <app-register-navbar> </app-register-navbar> 
+<header>
+  <app-register-navbar></app-register-navbar>
 </header>
-    
+
 <main>
+  <div class="flex justify-center mt-7">
+    <img class="w-780 h-auto object-contain" src="assets/images/utfpr-main2.png" alt="Campus da UTFPR" />
+  </div>
 
-    <!--Imagem da UTFPR-->
-    <div class="flex justify-center mt-7">
-        <img 
-            class="w-780 h-auto object-contain"
-            src="assets/images/utfpr-main2.png" 
-            alt="Campus da UTFPR"
-        >
-    </div>
-
-    
-     <!--Texto Principal-->
-    <div class="relative -mt-0 z-10 mb-8">
-        <div class="w-full md:max-w-xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div class="p-8 md:p-10">
-
-                <div class="text-center mb-6">
-                    <h1 class="text-3xl font-bold text-gray-900">Login</h1>
-                    <p class="text-gray-600 mt-1">Bem-vindo(a) de volta ao UTFPR-Conecta</p>
-                </div>
-
-                 <!--Form-->
-                 <div class="forms">
-                    <form #frm="ngForm" (ngSubmit)="login()" class="flex flex-col gap-4">
-
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email ou Registro Acadêmico</label>
-                            <input
-                                type="text"
-                                name="email"
-                                placeholder="Digite seu email ou RA"
-                                [(ngModel)]="email"
-                                 class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-
-                        <div>
-                            <label for="senha" class="block text-sm font-medium text-gray-700">Digite sua Senha</label>
-                            <input
-                                type="text"
-                                name="senha"
-                                placeholder="Digite sua senha"
-                                [(ngModel)]="email"
-                                 class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-
-                        <app-button
-                        routerLink="/home"
-                            type="submit"
-                            class="w-full mt-4"
-                            color="primary-yellow" 
-                        > Login</app-button>
-          
-                    </form>
-
-                    <!--Texto Inferior-->
-                    <div class="text-center mt-6 text-sm text-gray-600">
-                        <p>Não tem uma conta? 
-                            <a routerLink="/register" class="font-medium text-blue-600 hover:text-blue-500">Cadastre-se</a>
-                        </p>
-                    </div>
-        
-                </div>
-            </div>
+  <div class="relative -mt-0 z-10 mb-8">
+    <div class="w-full md:max-w-xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div class="p-8 md:p-10">
+        <div class="text-center mb-6">
+          <h1 class="text-3xl font-bold text-gray-900">Login</h1>
+          <p class="text-gray-600 mt-1">Bem-vindo(a) de volta ao UTFPR-Conecta</p>
         </div>
-     </div>
 
-    
+        <div class="forms">
+          <form #frm="ngForm" (ngSubmit)="login()" class="flex flex-col gap-4">
+            
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Digite seu Email</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Digite seu email"
+                [(ngModel)]="email"
+                required
+                class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700">Digite sua Senha</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Digite sua senha"
+                [(ngModel)]="password"
+                required
+                class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
+            <app-button
+              type="submit"
+              class="w-full mt-4"
+              color="primary-yellow"
+            >
+              Login
+            </app-button>
+
+          </form>
+
+          <div class="text-center mt-6 text-sm text-gray-600">
+            <p>Não tem uma conta?
+              <a routerLink="/register" class="font-medium text-blue-600 hover:text-blue-500">Cadastre-se</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
+<!-- MODAL SIMPLES -->
+<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/50" (click)="closeModal()"></div>
 
+  <div class="relative max-w-md w-full bg-white rounded-lg shadow-lg p-6 mx-4">
+    <h3 class="text-lg font-semibold">Aviso</h3>
+    <p class="mt-2 text-gray-700">{{ modalMessage }}</p>
 
+    <div class="text-right mt-4">
+      <button
+        (click)="closeModal()"
+        class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
