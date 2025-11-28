@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, ValueChangeEvent } from '@angular/forms';
 import { Api } from '../../core/services/api';
 import { Button } from '../../shared/button/button';
 import { MainNavbar } from '../../core/components/main-navbar/main-navbar';
-// ⚠️ REMOVER import { createClient } from '@supabase/supabase-js'; 
-import { SupabaseService } from '../../../supabase.service';// Adicione a importação do Serviço
-
+import { SupabaseService } from '../../../supabase.service';
+import { Footer } from "../../core/components/footer/footer";
 
 @Component({
   selector: 'app-event-form',
@@ -16,14 +15,15 @@ import { SupabaseService } from '../../../supabase.service';// Adicione a import
     ReactiveFormsModule,
     FormsModule,
     Button,
-    MainNavbar
+    MainNavbar,
+    Footer
   ],
   templateUrl: './event-form.html',
   styleUrls: ['./event-form.css']
 })
 export class EventForm {
 
-  // 🟡 Campos do formulário
+  // Campos do formulário
   nome = '';
   descricao = '';
   data = '';
@@ -34,75 +34,59 @@ export class EventForm {
   tipoInscricao = '';
   limiteVagas: number | null = null;
   emiteCertificado = false;
+  curso_destinado = [''];
 
-  // 🟡 Endereço
+  // Endereço
   cep = '';
-  endereco = {
-    rua: '',
-    bairro: '',
-    cidade: '',
-    estado: ''
-  };
+  endereco = { rua: '', bairro: '', cidade: '', estado: '' };
 
-  // 🟡 Banner
+  // Banner
   bannerFile: File | null = null;
 
-  // 🟡 Modal
+  // Modal
   showModal = false;
   modalType: 'success' | 'error' | null = null;
   modalMessage = '';
-  isSubmitting = false; // Controle de estado para evitar cliques duplos
+  isSubmitting = false;
 
-  // INJEÇÃO CORRIGIDA: Usa o SupabaseService
   constructor(
     private addressService: Api,
-    private supabaseService: SupabaseService // ✅ Serviço Supabase injetado
+    private supabaseService: SupabaseService
   ) {}
 
-  // ===============================
-  // 🔵 BUSCAR ENDEREÇO POR CEP
-  // ===============================
+  // Buscar endereço por CEP
   buscarEndereco() {
     if (this.cep.length < 8) return;
 
     this.addressService.getAddressByCep(this.cep).subscribe({
-      next: (dados) => {
-        this.endereco = dados;
-      },
-      error: () => {
-        this.openModal('error', 'CEP não encontrado.');
-      }
+      next: (dados) => { this.endereco = dados; },
+      error: () => { this.openModal('error', 'CEP não encontrado.'); }
     });
   }
 
-  // ===============================
-  // 🟣 PEGAR O ARQUIVO DO BANNER
-  // ===============================
+  // Seleção do arquivo do banner
   onBannerSelected(event: any) {
     this.bannerFile = event.target.files[0];
   }
 
-  // ===============================
-  // 🟢 ENVIAR FORMULÁRIO COMPLETO
-  // ===============================
+  // Enviar evento
   async enviarEvento() {
     if (!this.bannerFile) {
-        this.openModal('error', 'Selecione um banner para o evento.');
-        return;
+      this.openModal('error', 'Selecione um banner para o evento.');
+      return;
     }
-    
+
     this.isSubmitting = true;
 
     try {
-      // 1. CHAMA O UPLOAD NO SERVIÇO
+      // Upload do banner
       const { url: bannerUrl, error: uploadError } = await this.supabaseService.uploadBanner(this.bannerFile);
-
-      if (uploadError) {
-          this.openModal('error', `Erro ao fazer upload do banner: ${uploadError.message}`);
-          return;
+      if (uploadError || !bannerUrl) {
+        this.openModal('error', `Erro ao enviar banner: ${uploadError?.message || 'Desconhecido'}`);
+        return;
       }
-      
-      // 2. PREPARA DADOS PARA O SERVIÇO (Passa todos os dados do formulário)
+
+      // Preparar dados do evento
       const eventData = {
         nome: this.nome,
         descricao: this.descricao,
@@ -115,31 +99,29 @@ export class EventForm {
         limiteVagas: this.limiteVagas,
         emiteCertificado: this.emiteCertificado,
         cep: this.cep,
-        endereco: this.endereco // Passa o objeto endereço completo
+        endereco: this.endereco,
+        curso_destinado: this.categoria,
       };
 
-      // 3. CHAMA A INSERÇÃO NO BD NO SERVIÇO
-      const { error: dbError } = await this.supabaseService.insertEvent(eventData, bannerUrl || '');
-
+      // Inserir evento no Supabase
+      const { error: dbError } = await this.supabaseService.insertEvent(eventData, bannerUrl);
       if (dbError) {
         this.openModal('error', `Erro ao enviar evento: ${dbError.message}`);
         return;
       }
 
-      this.openModal('success', 'Evento enviado para aprovação.\n Aguarde até 24h!');
-      // TODO: Adicionar lógica para limpar o formulário.
+      this.openModal('success', 'Evento enviado para aprovação.\nAguarde até 24h!');
+      this.resetForm();
 
     } catch (e) {
-        this.openModal('error', 'Ocorreu um erro inesperado.');
-        console.error('Erro no envio do evento:', e);
+      console.error('Erro no envio do evento:', e);
+      this.openModal('error', 'Ocorreu um erro inesperado.');
     } finally {
-        this.isSubmitting = false;
+      this.isSubmitting = false;
     }
   }
 
-  // ===============================
-  // 🟡 MODAL
-  // ===============================
+  // Modal
   openModal(type: 'success' | 'error', msg: string) {
     this.modalType = type;
     this.modalMessage = msg;
@@ -148,5 +130,22 @@ export class EventForm {
 
   closeModal() {
     this.showModal = false;
+  }
+
+  // Resetar formulário após envio
+  resetForm() {
+    this.nome = '';
+    this.descricao = '';
+    this.data = '';
+    this.horaInicio = '';
+    this.horaFim = '';
+    this.formato = '';
+    this.cep = '';
+    this.endereco = { rua: '', bairro: '', cidade: '', estado: '' };
+    this.categoria = '';
+    this.tipoInscricao = '';
+    this.limiteVagas = null;
+    this.emiteCertificado = false;
+    this.bannerFile = null;
   }
 }

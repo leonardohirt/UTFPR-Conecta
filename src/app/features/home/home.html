@@ -1,107 +1,149 @@
 <app-main-navbar></app-main-navbar>
 
 <div class="flex flex-col min-h-screen bg-gray-50 text-gray-800">
-  
-  <section class="relative w-full h-64 md:h-80 bg-gray-200 rounded-xl overflow-hidden mx-auto mt-6 max-w-6xl">
+
+  <!-- HERO -->
+  <section class="relative w-full h-72 md:h-80 rounded-xl overflow-hidden mx-auto mt-6 max-w-6xl">
     <img src="assets/images/utfpr-main2.png" alt="UTFPR" class="w-full h-full object-cover">
     <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center text-white">
-      <h2 class="text-2xl md:text-3xl font-semibold mb-3">Veja o que está acontecendo na UTFPR</h2>
-      <button class="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-lg hover:bg-yellow-500 transition">
+      <h2 class="text-3xl font-semibold mb-3">Veja o que está acontecendo na UTFPR</h2>
+
+      <button 
+        routerLink="/eventos"
+        class="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-lg hover:bg-yellow-500 transition">
         Ver eventos
       </button>
     </div>
   </section>
 
-  <main class="flex-1 max-w-6xl mx-auto w-full mt-10 space-y-12 px-4">
-    
+  <main class="flex-1 max-w-6xl mx-auto w-full mt-10 space-y-16 px-6">
+
+    <!-- EVENTOS POR INTERESSE -->
     <section>
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-semibold">Eventos com base nos seus interesses:</h3>
-        <a href="#" class="text-yellow-500 font-medium hover:underline">Ver mais</a>
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-3xl font-semibold">Eventos com base nos seus interesses:</h3>
+        <a routerLink="/eventos" class="hover:underline cursor-pointer">Ver mais</a>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="flex gap-16 overflow-x-auto snap-x snap-mandatory pb-7 scrollbar-hide">
+        
+        <div
+          *ngFor="let e of recommendedEvents"
+          [routerLink]="['/eventos', e.id]"
+          class="w-[320px] bg-white rounded-xl shadow-md snap-start shrink-0 transition hover:shadow-lg cursor-pointer">
 
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">INTERNATIONAL CONGRESS OF...</h4>
-          <p class="text-sm text-gray-600">NOV | Curitiba - PR</p>
+          <img [src]="e.banner_url" class="rounded-t-xl h-44 w-full object-cover" alt="{{ e.nome }}">
+
+          <div class="p-4">
+            <span class="text-xs text-gray-700 font-medium">{{ e.categoria }}</span>
+            <h4 class="mt-1 font-semibold text-gray-900 leading-tight">{{ e.nome }}</h4>
+
+            <div class="flex items-center mt-3 text-sm text-gray-700">
+              <div class="mr-6 text-center">
+                <span class="font-bold block">
+                  {{ e.data | date:'LLL' | uppercase }}
+                </span>
+                <span class="text-xs">{{ e.data | date:'dd' }}</span>
+              </div>
+
+              <div>
+                <p>{{ e.cidade }} - {{ e.estado }}</p>
+                <span class="text-xs text-gray-500">
+                  {{ e.hora_inicio?.slice(0,5) }} - {{ e.hora_fim?.slice(0,5) }}
+                </span>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">Palestra: Ferramentas Open Source...</h4>
-          <p class="text-sm text-gray-600">OUT | Guarapuava - PR</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">Hackathon de Desenvolvimento...</h4>
-          <p class="text-sm text-gray-600">DEZ | Pato Branco - PR</p>
-        </div>
       </div>
     </section>
 
-    <section>
-      <h3 class="text-xl font-semibold mb-4">Descubra por categoria:</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-        <button class="flex flex-col items-center justify-center bg-white rounded-xl shadow p-4 hover:bg-yellow-100 transition">
-          🎓 <span class="mt-2 font-medium">Palestras</span>
-        </button>
-        <button class="flex flex-col items-center justify-center bg-white rounded-xl shadow p-4 hover:bg-yellow-100 transition">
-          💻 <span class="mt-2 font-medium">Hackathons</span>
-        </button>
-        <button class="flex flex-col items-center justify-center bg-white rounded-xl shadow p-4 hover:bg-yellow-100 transition">
-          🧪 <span class="mt-2 font-medium">Feiras</span>
-        </button>
-        <button class="flex flex-col items-center justify-center bg-white rounded-xl shadow p-4 hover:bg-yellow-100 transition">
-          ⚙️ <span class="mt-2 font-medium">Workshops</span>
-        </button>
-        <button class="flex flex-col items-center justify-center bg-white rounded-xl shadow p-4 hover:bg-yellow-100 transition">
-          📚 <span class="mt-2 font-medium">Seminários</span>
-        </button>
+    <!-- EVENTOS EM DESTAQUE -->
+    <section class="mt-10">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-3xl font-semibold">Eventos em destaque:</h3>
+        <a routerLink="/eventos" class="hover:underline cursor-pointer">Ver mais</a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <div
+          *ngFor="let e of featuredEvents"
+          [routerLink]="['/eventos', e.id]"
+          class="bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer">
+
+          <img [src]="e.banner_url" class="rounded-t-xl h-40 w-full object-cover" alt="{{ e.nome }}">
+
+          <div class="p-4">
+            <h4 class="font-semibold">{{ e.nome }}</h4>
+
+            <div class="flex items-center mt-2 text-sm">
+              <div class="mr-5 text-center">
+                <span class="font-bold block">
+                  {{ e.data | date:'LLL' | uppercase }}
+                </span>
+                <span class="text-xs">{{ e.data | date:'dd' }}</span>
+              </div>
+
+              <div>
+                <p class="text-gray-600">{{ e.cidade }} - {{ e.estado }}</p>
+                <p class="text-xs text-gray-500">
+                  {{ e.hora_inicio?.slice(0,5) }} - {{ e.hora_fim?.slice(0,5) }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
 
-
-    <section>
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-semibold">Eventos em destaque:</h3>
-        <a href="#" class="text-yellow-500 font-medium hover:underline">Ver mais</a>
+    <!-- TODOS OS EVENTOS -->
+    <section class="mt-10">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-3xl font-semibold">Todos os eventos</h3>
+        <a routerLink="/eventos" class="hover:underline cursor-pointer">Ver mais</a>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-     
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">Competição de Robótica</h4>
-          <p class="text-sm text-gray-600">NOV | Curitiba - PR</p>
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <div
+          *ngFor="let e of allEvents | slice:0:6"
+          [routerLink]="['/eventos', e.id]"
+          class="bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer">
+
+          <img [src]="e.banner_url" class="rounded-t-xl h-40 w-full object-cover" alt="{{ e.nome }}">
+
+          <div class="p-4">
+            <h4 class="font-semibold">{{ e.nome }}</h4>
+
+            <div class="flex items-center mt-2 text-sm">
+              <div class="mr-5 text-center">
+                <span class="font-bold block">
+                  {{ e.data | date:'LLL' | uppercase }}
+                </span>
+                <span class="text-xs">{{ e.data | date:'dd' }}</span>
+              </div>
+
+              <div>
+                <p class="text-gray-700">{{ e.cidade }} - {{ e.estado }}</p>
+                <p class="text-xs text-gray-500">
+                  {{ e.hora_inicio?.slice(0,5) }} - {{ e.hora_fim?.slice(0,5) }}
+                </p>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">I Congresso de Tecnologia</h4>
-          <p class="text-sm text-gray-600">OUT | Online</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-          <img src="assets/images/utfpr-main2.png" alt="" class="rounded-lg mb-3">
-          <h4 class="font-semibold">DevPR Conf 2025</h4>
-          <p class="text-sm text-gray-600">SET | Maringá - PR</p>
-        </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="bg-gray-900 text-white py-6 mt-12">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm px-4 space-y-4 md:space-y-0">
-      <p>© 2025 UTFPR-Conecta — Desenvolvido para fins acadêmicos</p>
-      <div class="flex space-x-4">
-        <a href="#" class="hover:text-yellow-400">Política de Privacidade</a>
-        <a href="#" class="hover:text-yellow-400">Termos de Uso</a>
-      </div>
-    </div>
-  </footer>
-
 </div>
+
+<app-footer></app-footer>

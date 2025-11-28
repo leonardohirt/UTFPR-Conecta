@@ -1,0 +1,65 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="min-h-screen bg-gray-50 py-10 px-6">
+  <h2 class="text-3xl font-semibold text-gray-900 mb-8 text-center">
+    Eventos pendentes de aprovação
+  </h2>
+
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+
+    <div
+      *ngFor="let event of pendentes"
+      class="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition border border-gray-200"
+    >
+      <!-- Banner -->
+      <img
+        *ngIf="event.banner_url"
+        [src]="event.banner_url"
+        class="w-full h-40 object-cover rounded-lg mb-4"
+      >
+
+      <!-- Dados -->
+      <h3 class="text-xl font-semibold text-gray-900">
+        {{ event.nome }}
+      </h3>
+
+      <p class="text-gray-700 text-sm mt-2">
+        {{ event.descricao }}
+      </p>
+
+      <!-- Info -->
+<div class="mt-4 text-sm text-gray-600">
+  <p><strong>Categoria:</strong> {{ event.categoria }}</p>
+  <p><strong>Cidade:</strong> {{ event.cidade }} - {{ event.estado }}</p>
+  <p><strong>Data:</strong> {{ event.data | date:'dd/MM/yyyy' }}</p>
+
+  <p>
+    <strong>Horário:</strong>
+    {{ event.hora_inicio?.slice(0,5) }}h –
+    {{ event.hora_fim?.slice(0,5) }}h
+  </p>
+</div>
+
+
+      <!-- Botões -->
+      <div class="flex gap-4 mt-6">
+        <button
+          (click)="aprovar(event.id)"
+          class="flex-1 bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition"
+        >
+          Aprovar
+        </button>
+
+        <button
+          (click)="excluir(event.id)"
+          class="flex-1 bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+        >
+          Excluir
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

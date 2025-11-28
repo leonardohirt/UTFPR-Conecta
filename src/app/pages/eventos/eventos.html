@@ -1,0 +1,23 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="max-w-6xl mx-auto mt-10 px-6">
+  <h2 class="text-3xl font-bold mb-6">Todos os eventos</h2>
+
+  <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
+    <div *ngFor="let e of eventos" 
+         class="bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer"
+         [routerLink]="['/eventos', e.id]"> <!-- rota pro detalhes do evento -->
+
+      <img [src]="e.banner_url" alt="{{ e.nome }}" class="h-40 w-full object-cover rounded-t-xl" />
+
+      <div class="p-4">
+        <h3 class="font-semibold text-lg">{{ e.nome }}</h3>
+        <p class="text-sm text-gray-600">{{ e.cidade }} - {{ e.estado }}</p>
+        <p class="text-sm text-gray-500">{{ e.data | date:'dd/MM/yyyy' }}</p>
+        <p class="text-xs text-gray-500">{{ e.hora_inicio }} - {{ e.hora_fim }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

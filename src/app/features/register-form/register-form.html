@@ -1,18 +1,15 @@
 <!--Navbar-->
-<app-register-navbar> </app-register-navbar>
+<app-register-navbar></app-register-navbar>
 
 <div class="flex justify-center mt-7">
-
   <img 
     class="w-780 h-auto object-contain"
     src="assets/images/utfpr-main2.png" 
     alt="Campus da UTFPR"
   >
-
 </div>
 
 <div class="relative -mt-0 z-10 mb-8">
-
   <div class="w-full md:max-w-xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
     
     <div class="p-8 md:p-10">
@@ -22,97 +19,97 @@
         <p class="text-gray-600 mt-1">Bem-vindo(a) ao UTFPR-Conecta</p>
       </div>
   
-      <div class="forms">
-        <form #frm="ngForm" (ngSubmit)="register()" class="flex flex-col gap-4">
-          
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Nome completo</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Digite seu nome completo"
-              [(ngModel)]="name"
-              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-  
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="email@exemplo.com"
-              [(ngModel)]="email"
-              class="mt-2 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-  
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Digite sua senha</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Digite sua Senha"
-              [(ngModel)]="password"
-              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-  
-          <div>
-            <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">Confirme sua senha</label>
-            <input
-              type="password"
-              name="passwordConfirm"
-              placeholder="Confirme sua Senha"
-              [(ngModel)]="passwordConfirm"
-              class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-  
-        
+      <form #frm="ngForm" (ngSubmit)="register()" class="flex flex-col gap-4">
 
-          <app-button 
-  type="submit" 
-  color="primary-yellow" 
-  [disabled]="isSubmitting" 
-  class="w-full mt-4"> 
-  {{ isSubmitting ? 'Cadastrando...' : 'Cadastre-se' }} <!-- Adicione esta lógica -->
-</app-button>
-  
-        </form>
-      </div>
-  
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nome completo</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Digite seu nome completo"
+            [(ngModel)]="name"
+            class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm 
+                   focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="email@exemplo.com"
+            [(ngModel)]="email"
+            class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm 
+                   focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Digite sua senha</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Digite sua Senha"
+            [(ngModel)]="password"
+            class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm 
+                   focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Confirme sua senha</label>
+          <input
+            type="password"
+            name="passwordConfirm"
+            placeholder="Confirme sua Senha"
+            [(ngModel)]="passwordConfirm"
+            class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm 
+                   focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          />
+        </div>
+
+        <app-button 
+          type="submit" 
+          color="primary-yellow" 
+          [disabled]="isSubmitting" 
+          class="w-full mt-4"
+        >
+          {{ isSubmitting ? 'Cadastrando...' : 'Cadastre-se' }}
+        </app-button>
+
+      </form>
+
       <div class="text-center mt-6 text-sm text-gray-600">
-        <p>
-          Já tem uma conta?
-          <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-500">
-            Login
-          </a>
-        </p>
+        Já tem uma conta?
+        <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-500">
+          Login
+        </a>
       </div>
   
-    </div> 
+    </div>
   </div>
 
-    <!-- MODAL -->
-<div
-  *ngIf="showModal"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
->
-  <div class="bg-white w-80 rounded-xl shadow-lg p-6 text-center">
+  <!-- MODAL -->
+  <div
+    *ngIf="showModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white w-80 rounded-xl shadow-lg p-6 text-center">
 
-    <h2 class="text-lg font-semibold mb-2">Atenção</h2>
+      <h2 class="text-lg font-semibold mb-2">Atenção</h2>
 
-    <p class="text-gray-700 mb-6 whitespace-pre-line">{{ modalMessage }}</p>
+      <p class="text-gray-700 mb-6 whitespace-pre-line">{{ modalMessage }}</p>
 
-    <button
-      class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-lg"
-      (click)="closeModal()"
-    >
-      Ok
-    </button>
+      <button
+        class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-lg"
+        (click)="closeModal()"
+      >
+        Ok
+      </button>
 
+    </div>
   </div>
-</div>
 
+  <app-footer></app-footer>
 </div>

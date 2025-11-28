@@ -1,0 +1,83 @@
+<app-main-navbar></app-main-navbar>
+
+<div *ngIf="event" class="flex flex-col items-center bg-gray-100 min-h-screen py-10">
+
+  <!-- Cabeçalho com Banner -->
+  <section class="w-full max-w-4xl rounded-xl overflow-hidden shadow-lg bg-white">
+    <img [src]="event.banner_url" alt="{{ event.nome }}" class="w-full h-64 object-cover">
+
+    <div class="p-6">
+      <h1 class="text-3xl font-bold text-gray-900">{{ event.nome }}</h1>
+
+      <p class="text-gray-600 mt-3 flex items-center gap-3">
+        <span>{{ event.data | date:'dd/MM/yyyy' }}</span>
+        <span>•</span>
+        <span>{{ event.hora_inicio }} - {{ event.hora_fim }}</span>
+      </p>
+
+      <p class="text-gray-700 mt-2 flex items-center gap-2">
+        📍 {{ event.cidade }} - {{ event.estado }}
+      </p>
+
+      <p class="text-gray-700 mt-1">
+        💰 {{ event.preco ? event.preco : 'Gratuito' }}
+      </p>
+
+      <!-- BOTÕES CENTRALIZADOS -->
+      <div class="mt-4 flex justify-center gap-4">
+        <!-- INSCRITO -->
+        <button *ngIf="isSubscribed && !loadingSubscription"
+          class="bg-green-500 text-white font-semibold px-12 py-2 rounded-lg cursor-default">
+          ✔ Inscrito
+        </button>
+
+        <!-- LOADING -->
+        <button *ngIf="loadingSubscription"
+          class="bg-gray-400 text-white font-semibold px-12 py-2 rounded-lg cursor-wait">
+          Inscrevendo...
+        </button>
+
+        <!-- BOTÃO DE INSCRIÇÃO -->
+        <button *ngIf="!isSubscribed && !loadingSubscription" (click)="subscribe()"
+          class="bg-yellow-400 text-black font-semibold px-12 py-2 rounded-lg hover:bg-yellow-500 transition">
+          Inscrever-se
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre o evento -->
+  <section class="w-full max-w-4xl bg-white p-6 rounded-xl shadow mt-10">
+    <h2 class="text-xl font-bold mb-3">Sobre o Evento</h2>
+    <p class="text-gray-700 leading-relaxed">
+      {{ event.descricao }}
+    </p>
+  </section>
+
+  <!-- PERGUNTAS FREQUENTES -->
+  <section class="mt-10">
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <h2 class="text-2x6 font-semibold text-center mb-6">Perguntas frequentes</h2>
+
+      <div class="space-y-3">
+        <p class="flex items-start gap-2 text-gray-700">
+          <span class="font-bold text-lg">+</span>
+          O evento fornecerá certificado?
+        </p>
+
+        <p class="flex items-start gap-2 text-gray-700">
+          <span class="font-bold text-lg">+</span>
+          As palestras serão gravadas para assistir depois?
+        </p>
+
+        <p class="flex items-start gap-2 text-gray-700">
+          <span class="font-bold text-lg">+</span>
+          Como faço para submeter meu trabalho científico?
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>
