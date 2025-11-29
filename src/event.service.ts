@@ -33,4 +33,15 @@ export class EventService {
 
     return { error };
   }
+
+  async requestEventDeletion(eventId: string, userId: string) {
+  return await this.supabase
+    .from('event_delete_requests')
+    .insert({
+      event_id: eventId,
+      user_id: userId,
+      status: 'pending'
+    });
+}
+
 }

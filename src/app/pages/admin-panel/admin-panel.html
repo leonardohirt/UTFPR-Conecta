@@ -1,10 +1,13 @@
 <app-main-navbar></app-main-navbar>
 
 <div class="min-h-screen bg-gray-50 py-10 px-6">
+
+  <!-- Título -->
   <h2 class="text-3xl font-semibold text-gray-900 mb-8 text-center">
     Eventos pendentes de aprovação
   </h2>
 
+  <!-- CARDS DOS EVENTOS PENDENTES -->
   <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
 
     <div
@@ -16,30 +19,30 @@
         *ngIf="event.banner_url"
         [src]="event.banner_url"
         class="w-full h-40 object-cover rounded-lg mb-4"
-      >
+      />
 
-      <!-- Dados -->
+      <!-- Nome -->
       <h3 class="text-xl font-semibold text-gray-900">
         {{ event.nome }}
       </h3>
 
+      <!-- Descrição -->
       <p class="text-gray-700 text-sm mt-2">
         {{ event.descricao }}
       </p>
 
-      <!-- Info -->
-<div class="mt-4 text-sm text-gray-600">
-  <p><strong>Categoria:</strong> {{ event.categoria }}</p>
-  <p><strong>Cidade:</strong> {{ event.cidade }} - {{ event.estado }}</p>
-  <p><strong>Data:</strong> {{ event.data | date:'dd/MM/yyyy' }}</p>
+      <!-- Infos -->
+      <div class="mt-4 text-sm text-gray-600">
+        <p><strong>Categoria:</strong> {{ event.categoria }}</p>
+        <p><strong>Cidade:</strong> {{ event.cidade }} - {{ event.estado }}</p>
+        <p><strong>Data:</strong> {{ event.data | date:'dd/MM/yyyy' }}</p>
 
-  <p>
-    <strong>Horário:</strong>
-    {{ event.hora_inicio?.slice(0,5) }}h –
-    {{ event.hora_fim?.slice(0,5) }}h
-  </p>
-</div>
-
+        <p>
+          <strong>Horário:</strong>
+          {{ event.hora_inicio?.slice(0,5) }}h –
+          {{ event.hora_fim?.slice(0,5) }}h
+        </p>
+      </div>
 
       <!-- Botões -->
       <div class="flex gap-4 mt-6">
@@ -60,6 +63,72 @@
     </div>
 
   </div>
+
+  <!-- ================================================= -->
+  <!-- SOLICITAÇÕES DE EXCLUSÃO -->
+  <!-- ================================================= -->
+
+  <h2 class="text-3xl font-semibold text-gray-900 my-10 text-center">
+    Solicitações de exclusão
+  </h2>
+
+  <div class="max-w-4xl mx-auto space-y-6">
+
+    <div
+      *ngFor="let req of deletionRequests"
+      class="bg-white shadow p-5 rounded-xl border border-gray-200"
+    >
+
+      <div class="flex items-center gap-4">
+
+        <img
+          [src]="req.event?.banner_url"
+          class="w-24 h-24 rounded object-cover"
+        />
+
+        <div>
+          <p class="text-lg font-semibold">{{ req.event?.nome }}</p>
+          <p class="text-gray-600">Solicitado por: {{ req.user?.nome }}</p>
+
+          <p class="text-sm text-gray-400">
+            {{ req.created_at | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+
+          <p class="text-sm font-bold mt-1">
+            Status:
+            <span
+              [ngClass]="{
+                'text-yellow-500': req.status === 'pending',
+                'text-green-600': req.status === 'approved',
+                'text-red-600': req.status === 'rejected'
+              }"
+            >
+              {{ req.status }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- BOTÕES DE AÇÃO -->
+      <div class="mt-4 flex gap-3" *ngIf="req.status === 'pending'">
+        <button
+          (click)="approveDelete(req.id, req.event_id)"
+          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        >
+          Aprovar
+        </button>
+
+        <button
+          (click)="rejectDelete(req.id)"
+          class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Recusar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <app-footer></app-footer>

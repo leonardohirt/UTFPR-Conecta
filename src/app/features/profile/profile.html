@@ -1,0 +1,65 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="max-w-6xl mx-auto mt-10 px-6">
+
+  <h2 class="text-3xl font-bold mb-6">Meus Eventos</h2>
+
+  <!-- loading -->
+  <div *ngIf="loading" class="text-center text-lg">
+    Carregando...
+  </div>
+
+  <!-- nenhum evento -->
+  <div *ngIf="!loading && eventos.length === 0" class="text-center text-gray-500">
+    Você ainda não criou nenhum evento.
+  </div>
+
+  <!-- lista de eventos -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" *ngIf="eventos.length > 0">
+    <div 
+      *ngFor="let e of eventos"
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:scale-[1.02] transition"
+    >
+      <img
+        [src]="e.banner_url"
+        alt="Banner"
+        class="w-full h-40 object-cover"
+      />
+
+      <div class="p-4">
+        <h3 class="text-xl font-semibold">{{ e.titulo }}</h3>
+
+        <p class="text-sm text-gray-600 mt-1">
+          {{ e.data }} às {{ e.hora }}
+        </p>
+
+        <p class="text-gray-700 mt-3 line-clamp-3">
+          {{ e.descricao }}
+        </p>
+
+        <div class="mt-4 flex gap-3">
+
+          <!-- editar -->
+          <a 
+            [routerLink]="['/edit-event', e.id]"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+          >
+            Editar
+          </a>
+
+          <!-- solicitar exclusão -->
+          <button
+            (click)="requestDelete(e.id)"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700"
+          >
+            Solicitar Exclusão
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

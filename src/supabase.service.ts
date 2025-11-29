@@ -13,7 +13,6 @@ export class SupabaseService {
   constructor() {
     this.supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
 
-    // Atualiza o signal quando o usuário loga/desloga
     this.supabase.auth.onAuthStateChange((event, session) => {
       this.currentUser.set(session?.user ?? null);
     });
@@ -27,25 +26,6 @@ export class SupabaseService {
   }
 
   // ========================================
-  // 🔥 MÉTODO DE USUÁRIO — getUser()
-  // ========================================
-  async getUser(): Promise<User | null> {
-    const { data, error } = await this.supabase.auth.getUser();
-    if (error) {
-      console.error("Erro ao obter usuário:", error);
-      return null;
-    }
-    return data.user ?? null;
-  }
-
-  // MÉTODO OPCIONAL — obter Session
-  async getSession() {
-    const { data, error } = await this.supabase.auth.getSession();
-    if (error) return null;
-    return data.session;
-  }
-
-  // ========================================
   // AUTH
   // ========================================
   async register(email: string, password: string, name: string) {
@@ -55,7 +35,7 @@ export class SupabaseService {
     if (authError) return { user: null, error: authError };
 
     if (authData.user) {
-      const { error: profileError } = await this.supabase
+      await this.supabase
         .from('profiles')
         .insert({
           id: authData.user.id,
@@ -63,8 +43,6 @@ export class SupabaseService {
           curso: null,
           is_admin: false
         });
-
-      if (profileError) return { user: authData.user, error: profileError };
     }
 
     return { user: authData.user, error: null };
@@ -81,6 +59,20 @@ export class SupabaseService {
     return await this.supabase.auth.signOut();
   }
 
+  async getUser(): Promise<User | null> {
+    const { data, error } = await this.supabase.auth.getUser();
+    if (error) {
+      console.error("Erro ao obter usuário:", error);
+      return null;
+    }
+    return data.user ?? null;
+  }
+
+  async getSession() {
+    const { data, error } = await this.supabase.auth.getSession();
+    return error ? null : data.session;
+  }
+
   // ========================================
   // PROFILE
   // ========================================
@@ -93,61 +85,45 @@ export class SupabaseService {
   }
 
   async updateUserCourse(userId: string, course: string) {
-    const { error } = await this.supabase
+    return await this.supabase
       .from('profiles')
       .update({ curso: course })
       .eq('id', userId);
-
-    return { error };
   }
 
-async getUserCourse() {
-  const user = this.currentUser();
-  if (!user) return null;
+  async getUserCourse() {
+    const user = this.currentUser();
+    if (!user) return null;
 
-  const { data, error } = await this.supabase
-    .from('profiles')
-    .select('curso')
-    .eq('id', user.id)
-    .single();
+    const { data } = await this.supabase
+      .from('profiles')
+      .select('curso')
+      .eq('id', user.id)
+      .single();
 
-  if (error) {
-    console.error("Erro ao buscar curso:", error);
-    return null;
+    return data?.curso ?? null;
   }
 
-  return data?.curso ?? null;
-}
-
-
-  // ========================================
-  // ADMIN — (ÚNICO MÉTODO CORRETO)
-  // ========================================
   async isAdmin(userId: string): Promise<boolean> {
-    const { data, error } = await this.supabase
+    const { data } = await this.supabase
       .from('profiles')
       .select('is_admin')
       .eq('id', userId)
       .single();
 
-    if (error) {
-      console.error('Erro ao verificar admin:', error);
-      return false;
-    }
-
     return data?.is_admin === true;
   }
 
   async setAdmin(userId: string, isAdmin = true) {
-    const { error } = await this.supabase
+    return await this.supabase
       .from('profiles')
       .update({ is_admin: isAdmin })
       .eq('id', userId);
-
-    return { error };
   }
 
-
+  // ========================================
+  // BANNER
+  // ========================================
   async uploadBanner(file: File) {
     if (!file) return { url: null, error: { message: 'Nenhum arquivo selecionado' } };
 
@@ -199,90 +175,66 @@ async getUserCourse() {
       aprovado: false
     };
 
-    const { error } = await this.supabase
+    return await this.supabase
       .from('events')
       .insert(eventToInsert);
-
-    return { error };
   }
 
   async getAllEvents() {
-    const { data, error } = await this.supabase
+    return await this.supabase
       .from('events')
       .select('*')
       .eq('aprovado', true)
       .order('data', { ascending: true });
-
-    return { data, error };
   }
 
-  async getRecommendedEvents(category: string) {
-    if (!category || category === 'Não tenho curso') {
-      return this.getFeaturedEvents();
-    }
-
-    const { data, error } = await this.supabase
+  async getPendingEventsAdmin() {
+    return await this.supabase
       .from('events')
       .select('*')
-      .eq('curso_destinado', category)
-      .eq('aprovado', true)
-      .limit(3);
-
-    return { data, error };
-  }
-
-  async getFeaturedEvents() {
-    const { data, error } = await this.supabase
-      .from('events')
-      .select('*')
-      .eq('aprovado', true)
-      .order('criado_em', { ascending: false })
-      .limit(3);
-
-    return { data, error };
-  }
-
-  // ========================================
-  // ADMIN (EVENTS)
-  // ========================================
-  async getPendingEvents() {
-    const { data, error } = await this.supabase
-      .from('events')
-      .select('*')
-      .eq('aprovado', false);
-
-    return { data, error };
+      .eq('aprovado', false)
+      .order('criado_em', { ascending: true });
   }
 
   async approveEvent(id: number) {
-    const { data, error } = await this.supabase
+    return await this.supabase
       .from('events')
       .update({ aprovado: true })
       .eq('id', id)
       .select()
       .single();
-
-    return { data, error };
   }
 
   async deleteEvent(id: number) {
-    const { error } = await this.supabase
+    return await this.supabase
       .from('events')
       .delete()
       .eq('id', id);
-
-    return { error };
   }
 
-  // ========================================
-  // EVENT DETAILS
-  // ========================================
   async getEventById(id: string) {
-    return this.supabase
+    return await this.supabase
       .from('events')
       .select('*')
       .eq('id', id)
       .single();
+  }
+
+  async updateEventById(id: number | string, payload: any) {
+    return await this.supabase
+      .from('events')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+  }
+
+  async getEventsByCreator(userId: string) {
+    return await this.supabase
+      .from('events')
+      .select('*')
+      .eq('criado_por', userId)
+      .order('criado_em', { ascending: false });
   }
 
   // ========================================
@@ -296,14 +248,57 @@ async getUserCourse() {
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (error) return false;
-    return data !== null;
+    return !error && data !== null;
   }
 
   async subscribeToEvent(eventId: string, userId: string) {
     return await this.supabase
       .from('event_registrations')
       .insert({ event_id: eventId, user_id: userId });
+  }
+
+  // ========================================
+  // DELETE REQUESTS
+  // ========================================
+  async requestEventDeletion(eventId: string, userId: string) {
+    return await this.supabase
+      .from('event_delete_requests')
+      .insert({
+        event_id: eventId,
+        user_id: userId,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      });
+  }
+
+  async getDeletionRequests() {
+    return await this.supabase
+      .from('event_delete_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+  }
+
+  async approveDeletionRequest(requestId: string, eventId: string) {
+    const { error: deleteError } = await this.supabase
+      .from('events')
+      .delete()
+      .eq('id', eventId);
+
+    if (deleteError) return { error: deleteError };
+
+    const { error: updateError } = await this.supabase
+      .from('event_delete_requests')
+      .update({ status: 'approved' })
+      .eq('id', requestId);
+
+    return { error: updateError };
+  }
+
+  async rejectDeletionRequest(requestId: string) {
+    return await this.supabase
+      .from('event_delete_requests')
+      .update({ status: 'rejected' })
+      .eq('id', requestId);
   }
 
 }
