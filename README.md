@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Logo-vetor(1).png" alt="Logo UTFPR Conecta" width="280">
+  <img src="Logo-vetor.png" alt="Logo UTFPR Conecta" width="280">
 </p>
 
 # UTFPR Conecta
