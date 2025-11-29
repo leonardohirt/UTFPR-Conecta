@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Logo-vetor.png" alt="Logo UTFPR Conecta" width="280">
+</p>
+
 # UTFPR Conecta
 
 O projeto consiste no desenvolvimento de uma aplicação web voltada à divulgação eorganização de eventos que acontecem na UTFPR Guarapuava. Através disso, alunos, professores e a comunidade acadêmica poderão visualizar eventos futuros, acessar detalhes como data, local e descrição, além de receber notificações e confirmar presença. A proposta busca facilitar o acesso à informação e aumentar a participação nas atividades
