@@ -207,6 +207,26 @@ export class EventForm implements OnInit {
     this.bannerFile = event.target.files[0] ?? null;
   }
 
+get isFormValid(): boolean {
+    return (
+      this.nome.trim() !== '' &&
+      this.descricao.trim() !== '' &&
+      this.data.trim() !== '' &&
+      this.horaInicio.trim() !== '' &&
+      this.horaFim.trim() !== '' &&
+      this.formato.trim() !== '' &&
+      this.categoria.trim() !== '' &&
+      this.tipoInscricao.trim() !== '' &&
+      this.cep.trim() !== '' &&
+      this.endereco.rua.trim() !== '' &&
+      this.endereco.bairro.trim() !== '' &&
+      this.endereco.cidade.trim() !== '' &&
+      this.endereco.estado.trim() !== '' &&
+      (this.eventId ? true : this.bannerFile !== null) // banner é obrigatório só na criação
+    );
+  }
+  
+
   resetForm() {
     this.nome = '';
     this.descricao = '';

@@ -42,7 +42,7 @@
             <td class="p-2 flex flex-wrap gap-2">
               <ng-container *ngIf="ev.criado_por === currentUserId">
                 <app-button color="primary-yellow" (click)="openEditPage(ev.id)">Editar</app-button>
-                <app-button color="primary-yellow" (click)="confirmDelete(ev.id)">Excluir</app-button>
+                <app-button color="danger" (click)="confirmDelete(ev.id)">Excluir</app-button>
               </ng-container>
             </td>
           </tr>
