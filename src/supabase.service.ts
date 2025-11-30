@@ -134,7 +134,7 @@ export class SupabaseService {
       formato: eventData.formato,
       tipo_inscricao: eventData.tipoInscricao,
       limite_vagas: eventData.limiteVagas,
-      emite_certificado: eventData.emiteCertificado, // Recebe booleano do event-form.ts
+      emite_certificado: eventData.emiteCertificado, 
       criado_por: user.id,
       criado_em: new Date(),
       curso_destinado: eventData.curso_destinado ?? null,
@@ -153,7 +153,6 @@ export class SupabaseService {
   }
 
   async updateEventById(id: number | string, payload: any) {
-    // O payload deve ser criado no event-form.ts usando os nomes de coluna do Supabase (snake_case)
     return await this.supabase.from('events').update(payload).eq('id', id).select().single();
   }
 
@@ -169,7 +168,8 @@ export class SupabaseService {
     return await this.supabase.from('events').update({ aprovado: true }).eq('id', id).select().single();
   }
 
-  async deleteEvent(id: number) {
+  // Ajustado para aceitar string | number, para ser compatível com IDs do Supabase
+  async deleteEvent(id: string | number) { 
     return await this.supabase.from('events').delete().eq('id', id);
   }
 

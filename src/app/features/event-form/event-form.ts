@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Api } from '../../core/services/api';
@@ -25,6 +25,7 @@ import { Footer } from "../../core/components/footer/footer";
 export class EventForm implements OnInit {
 
   eventId: string | null = null;
+  currentUserId: string | null = null; 
 
   nome: string = '';
   descricao: string = '';
@@ -35,7 +36,7 @@ export class EventForm implements OnInit {
   formato: string = '';
   tipoInscricao: string = '';
   limiteVagas: number | null = null;
-  emiteCertificado: string = 'false'; // Ajustado para string para o ngModel dos radio buttons
+  emiteCertificado: string = 'false';
 
   cep: string = '';
   endereco: any = {
@@ -54,11 +55,15 @@ export class EventForm implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router, 
     private addressService: Api,
     private supabaseService: SupabaseService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const user = await this.supabaseService.getUser();
+    this.currentUserId = user?.id ?? null;
+
     this.route.queryParams.subscribe(params => {
       this.eventId = params['id'] ?? null;
       if (this.eventId) {
@@ -68,13 +73,28 @@ export class EventForm implements OnInit {
   }
 
   async carregarEvento(id: string) {
+    if (!this.currentUserId) {
+      this.openModal('error', 'Você precisa estar logado para editar eventos.');
+      this.router.navigate(['/event-crud']);
+      return;
+    }
+    
     const { data, error } = await this.supabaseService.getEventById(id);
     if (error || !data) {
       console.error('Erro ao carregar evento', error);
+      this.openModal('error', 'Evento não encontrado.');
+      this.router.navigate(['/event-crud']);
       return;
     }
 
-    // Formata a data para 'YYYY-MM-DD' para o input type="date"
+    // Verificar se o usuário logado é o criador
+    if (data.criado_por !== this.currentUserId) {
+      this.openModal('error', 'Você só pode editar eventos que criou.');
+      this.router.navigate(['/event-crud']);
+      return;
+    }
+
+    // Lógica de preenchimento do formulário
     const eventDate = new Date(data.data);
     const formattedDate = eventDate.toISOString().substring(0, 10);
     
@@ -87,18 +107,18 @@ export class EventForm implements OnInit {
     this.formato = data.formato;
     this.tipoInscricao = data.tipo_inscricao ?? data.tipoInscricao;
     this.limiteVagas = data.limite_vagas === null ? null : Number(data.limite_vagas);
-    // Converte o booleano do banco para string 'true' ou 'false'
     this.emiteCertificado = String(data.emite_certificado ?? data.emiteCertificado);
 
     this.cep = data.cep;
     this.endereco = {
       rua: data.rua ?? '',
       bairro: data.bairro ?? '',
-      cidade: data.cidade ?? '',
-      estado: data.estado ?? ''
+      cidade: data.localidade ?? '',
+      estado: data.uf ?? ''
     };
   }
 
+  // RESTAURADO: Lógica de envio (criação) ou atualização
   async enviarEvento() {
     this.isSubmitting = true;
 
@@ -110,14 +130,14 @@ export class EventForm implements OnInit {
 
       if (!this.bannerFile) {
         this.openModal('error', 'Selecione um banner para o evento.');
-        this.isSubmitting = false; // Adicionado para evitar finally ser chamado se retornar aqui
+        this.isSubmitting = false;
         return;
       }
 
       const { url, error: uploadError } = await this.supabaseService.uploadBanner(this.bannerFile);
       if (uploadError || !url) {
         this.openModal('error', uploadError?.message || 'Erro ao enviar banner.');
-        this.isSubmitting = false; // Adicionado para evitar finally ser chamado se retornar aqui
+        this.isSubmitting = false;
         return;
       }
 
@@ -132,7 +152,7 @@ export class EventForm implements OnInit {
           formato: this.formato,
           tipoInscricao: this.tipoInscricao,
           limiteVagas: this.limiteVagas,
-          emiteCertificado: this.emiteCertificado === 'true', // Converte string para boolean
+          emiteCertificado: this.emiteCertificado === 'true',
           cep: this.cep,
           endereco: this.endereco,
         },
@@ -152,8 +172,8 @@ export class EventForm implements OnInit {
     }
   }
 
+  // RESTAURADO: Lógica de atualização
   async atualizarEvento() {
-    // Cria o payload com os nomes das colunas do Supabase (snake_case)
     const payload = {
       nome: this.nome,
       descricao: this.descricao,
@@ -164,7 +184,7 @@ export class EventForm implements OnInit {
       formato: this.formato,
       tipo_inscricao: this.tipoInscricao,
       limite_vagas: this.limiteVagas,
-      emite_certificado: this.emiteCertificado === 'true', // Converte string para boolean
+      emite_certificado: this.emiteCertificado === 'true',
       cep: this.cep,
       rua: this.endereco.rua,
       bairro: this.endereco.bairro,
@@ -181,6 +201,7 @@ export class EventForm implements OnInit {
 
     this.openModal('success', 'Evento atualizado com sucesso!');
   }
+
 
   onBannerSelected(event: any) {
     this.bannerFile = event.target.files[0] ?? null;
