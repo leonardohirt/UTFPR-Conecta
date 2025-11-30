@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { EventService } from '../../core/services/event.service'; // Assumindo que este serviço encapsula SupabaseService
+import { EventService } from '../../core/services/event.service'; 
 import { MainNavbar } from '../../core/components/main-navbar/main-navbar';
 import { Footer } from '../../core/components/footer/footer';
 import { Button } from '../../shared/button/button';
-import { SupabaseService } from '../../../supabase.service'; // Importar SupabaseService
+import { SupabaseService } from '../../../supabase.service'; 
 
 @Component({
   selector: 'app-event-crud',
@@ -17,18 +17,18 @@ export class EventCrud implements OnInit {
   
   events: any[] = [];
   loading = true;
-  currentUserId: string | null = null; // Para armazenar o ID do usuário
+  currentUserId: string | null = null; 
 
   // --- Modal ---
   showModal = false;
   modalType: 'success' | 'error' = 'success';
   modalMessage: string = '';
-  eventToDeleteId: string | null = null; // ID do evento para exclusão
+  eventToDeleteId: string | null = null; 
 
   constructor(
     private eventService: EventService,
     private router: Router,
-    private supabaseService: SupabaseService // Injetar SupabaseService
+    private supabaseService: SupabaseService 
   ) {}
 
   async ngOnInit() {
@@ -45,7 +45,6 @@ export class EventCrud implements OnInit {
     }
 
     this.loading = true;
-    // Chama a nova função para carregar eventos criados pelo usuário logado
     const { data, error } = await this.supabaseService.getEventsByCreator(this.currentUserId);
     
     if (!error) {
@@ -62,36 +61,42 @@ export class EventCrud implements OnInit {
   }
 
   openEditPage(id: string) {
-    // Apenas navegamos, o formulário de edição fará a verificação
     this.router.navigate(['/event-form'], { queryParams: { id } });
   }
 
   // 1. Prepara para exclusão (Abre modal de confirmação)
   confirmDelete(id: string) {
     this.eventToDeleteId = id;
-    this.openModal('error', 'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.', true);
+    // Mudança para 'success' para não mostrar um X de erro na confirmação
+    this.openModal('success', 'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.', true);
   }
   
   // 2. Executa a exclusão (Chamado pelo botão no modal)
   async deleteEvent() {
-    if (!this.eventToDeleteId) return;
+    // CORREÇÃO PRINCIPAL: Isola o ID do evento imediatamente
+    const idToDelete = this.eventToDeleteId;
+
+    if (!idToDelete) {
+        // Se o ID for nulo (apenas uma medida de segurança)
+        this.openModal('error', 'Erro interno: ID do evento para exclusão não foi capturado.');
+        return;
+    }
 
     this.closeModal(); // Fecha o modal de confirmação
-
-    const id = this.eventToDeleteId;
     this.loading = true; // Mostra o loader enquanto exclui
 
-    const { error } = await this.supabaseService.deleteEvent(id);
+    // Usa o ID isolado
+    const { error } = await this.supabaseService.deleteEvent(idToDelete);
 
     if (error) {
       this.openModal('error', 'Erro ao deletar o evento: ' + error.message);
     } else {
-      this.events = this.events.filter(ev => ev.id !== id);
+      this.events = this.events.filter(ev => ev.id !== idToDelete);
       this.openModal('success', 'Evento excluído com sucesso!');
     }
 
     this.loading = false;
-    this.eventToDeleteId = null;
+    this.eventToDeleteId = null; // CORREÇÃO: Limpa o ID APENAS após a conclusão da operação
   }
 
   // --- Métodos do Modal ---
@@ -103,6 +108,7 @@ export class EventCrud implements OnInit {
 
   closeModal() {
     this.showModal = false;
-    this.eventToDeleteId = null; // Reseta o ID após fechar
+    // CORREÇÃO: Comentamos ou removemos a limpeza prematura daqui
+    // O this.eventToDeleteId = null; foi movido para o final de deleteEvent()
   }
 }
