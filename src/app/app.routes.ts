@@ -9,6 +9,7 @@ import { AdminPanel } from './pages/admin-panel/admin-panel';
 import { EventosComponent } from './pages/eventos/eventos';
 import { EventDetailsComponent } from './features/event-details/event-details';
 import { SelectCourseComponent } from './features/select-course/select-course';
+import { EventCrud } from './features/event-crud/event-crud';
 
 export const routes: Routes = [
 
@@ -53,6 +54,12 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
 
+  {
+    path: 'event-crud',
+    component: EventCrud,
+    
+  },
+
   // ROTAS PÚBLICAS
   {path: 'home', component: HomeComponent},
   { path: 'login', component: Login },
@@ -60,5 +67,7 @@ export const routes: Routes = [
 
   // REDIRECIONAMENTOS
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: 'home' },
+
+ 
 ];

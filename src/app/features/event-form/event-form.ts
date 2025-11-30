@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule, ValueChangeEvent } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Api } from '../../core/services/api';
 import { Button } from '../../shared/button/button';
 import { MainNavbar } from '../../core/components/main-navbar/main-navbar';
@@ -8,144 +9,231 @@ import { SupabaseService } from '../../../supabase.service';
 import { Footer } from "../../core/components/footer/footer";
 
 @Component({
-  selector: 'app-event-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    Button,
-    MainNavbar,
-    Footer
-  ],
-  templateUrl: './event-form.html',
-  styleUrls: ['./event-form.css']
+  selector: 'app-event-form',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    Button,
+    MainNavbar,
+    Footer
+  ],
+  templateUrl: './event-form.html',
+  styleUrls: ['./event-form.css']
 })
-export class EventForm {
+export class EventForm implements OnInit {
 
-  // Campos do formulário
-  nome = '';
-  descricao = '';
-  data = '';
-  horaInicio = '';
-  horaFim = '';
-  categoria = '';
-  formato = '';
-  tipoInscricao = '';
-  limiteVagas: number | null = null;
-  emiteCertificado = false;
-  curso_destinado = [''];
+  eventId: string | null = null;
 
-  // Endereço
-  cep = '';
-  endereco = { rua: '', bairro: '', cidade: '', estado: '' };
+  nome: string = '';
+  descricao: string = '';
+  data: string = '';
+  horaInicio: string = '';
+  horaFim: string = '';
+  categoria: string = '';
+  formato: string = '';
+  tipoInscricao: string = '';
+  limiteVagas: number | null = null;
+  emiteCertificado: string = 'false'; // Ajustado para string para o ngModel dos radio buttons
 
-  // Banner
-  bannerFile: File | null = null;
+  cep: string = '';
+  endereco: any = {
+    rua: '',
+    bairro: '',
+    cidade: '',
+    estado: ''
+  };
 
-  // Modal
-  showModal = false;
-  modalType: 'success' | 'error' | null = null;
-  modalMessage = '';
-  isSubmitting = false;
+  bannerFile: File | null = null;
+  isSubmitting = false;
 
-  constructor(
-    private addressService: Api,
-    private supabaseService: SupabaseService
-  ) {}
+  showModal = false;
+  modalType: 'success' | 'error' = 'success';
+  modalMessage: string = '';
 
-  // Buscar endereço por CEP
-  buscarEndereco() {
-    if (this.cep.length < 8) return;
+  constructor(
+    private route: ActivatedRoute,
+    private addressService: Api,
+    private supabaseService: SupabaseService
+  ) {}
 
-    this.addressService.getAddressByCep(this.cep).subscribe({
-      next: (dados) => { this.endereco = dados; },
-      error: () => { this.openModal('error', 'CEP não encontrado.'); }
-    });
-  }
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.eventId = params['id'] ?? null;
+      if (this.eventId) {
+        this.carregarEvento(this.eventId);
+      }
+    });
+  }
 
-  // Seleção do arquivo do banner
-  onBannerSelected(event: any) {
-    this.bannerFile = event.target.files[0];
-  }
+  async carregarEvento(id: string) {
+    const { data, error } = await this.supabaseService.getEventById(id);
+    if (error || !data) {
+      console.error('Erro ao carregar evento', error);
+      return;
+    }
 
-  // Enviar evento
-  async enviarEvento() {
-    if (!this.bannerFile) {
-      this.openModal('error', 'Selecione um banner para o evento.');
-      return;
-    }
+    // Formata a data para 'YYYY-MM-DD' para o input type="date"
+    const eventDate = new Date(data.data);
+    const formattedDate = eventDate.toISOString().substring(0, 10);
+    
+    this.nome = data.nome;
+    this.descricao = data.descricao;
+    this.data = formattedDate;
+    this.horaInicio = data.hora_inicio ?? data.horaInicio;
+    this.horaFim = data.hora_fim ?? data.horaFim;
+    this.categoria = data.categoria;
+    this.formato = data.formato;
+    this.tipoInscricao = data.tipo_inscricao ?? data.tipoInscricao;
+    this.limiteVagas = data.limite_vagas === null ? null : Number(data.limite_vagas);
+    // Converte o booleano do banco para string 'true' ou 'false'
+    this.emiteCertificado = String(data.emite_certificado ?? data.emiteCertificado);
 
-    this.isSubmitting = true;
+    this.cep = data.cep;
+    this.endereco = {
+      rua: data.rua ?? '',
+      bairro: data.bairro ?? '',
+      cidade: data.cidade ?? '',
+      estado: data.estado ?? ''
+    };
+  }
 
-    try {
-      // Upload do banner
-      const { url: bannerUrl, error: uploadError } = await this.supabaseService.uploadBanner(this.bannerFile);
-      if (uploadError || !bannerUrl) {
-        this.openModal('error', `Erro ao enviar banner: ${uploadError?.message || 'Desconhecido'}`);
-        return;
-      }
+  async enviarEvento() {
+    this.isSubmitting = true;
 
-      // Preparar dados do evento
-      const eventData = {
-        nome: this.nome,
-        descricao: this.descricao,
-        data: this.data,
-        horaInicio: this.horaInicio,
-        horaFim: this.horaFim,
-        categoria: this.categoria,
-        formato: this.formato,
-        tipoInscricao: this.tipoInscricao,
-        limiteVagas: this.limiteVagas,
-        emiteCertificado: this.emiteCertificado,
-        cep: this.cep,
-        endereco: this.endereco,
-        curso_destinado: this.categoria,
-      };
+    try {
+      if (this.eventId) {
+        await this.atualizarEvento();
+        return;
+      }
 
-      // Inserir evento no Supabase
-      const { error: dbError } = await this.supabaseService.insertEvent(eventData, bannerUrl);
-      if (dbError) {
-        this.openModal('error', `Erro ao enviar evento: ${dbError.message}`);
-        return;
-      }
+      if (!this.bannerFile) {
+        this.openModal('error', 'Selecione um banner para o evento.');
+        this.isSubmitting = false; // Adicionado para evitar finally ser chamado se retornar aqui
+        return;
+      }
 
-      this.openModal('success', 'Evento enviado para aprovação.\nAguarde até 24h!');
-      this.resetForm();
+      const { url, error: uploadError } = await this.supabaseService.uploadBanner(this.bannerFile);
+      if (uploadError || !url) {
+        this.openModal('error', uploadError?.message || 'Erro ao enviar banner.');
+        this.isSubmitting = false; // Adicionado para evitar finally ser chamado se retornar aqui
+        return;
+      }
 
-    } catch (e) {
-      console.error('Erro no envio do evento:', e);
-      this.openModal('error', 'Ocorreu um erro inesperado.');
-    } finally {
-      this.isSubmitting = false;
-    }
-  }
+      const { error } = await this.supabaseService.insertEvent(
+        {
+          nome: this.nome,
+          descricao: this.descricao,
+          data: this.data,
+          horaInicio: this.horaInicio,
+          horaFim: this.horaFim,
+          categoria: this.categoria,
+          formato: this.formato,
+          tipoInscricao: this.tipoInscricao,
+          limiteVagas: this.limiteVagas,
+          emiteCertificado: this.emiteCertificado === 'true', // Converte string para boolean
+          cep: this.cep,
+          endereco: this.endereco,
+        },
+        url
+      );
 
-  // Modal
-  openModal(type: 'success' | 'error', msg: string) {
-    this.modalType = type;
-    this.modalMessage = msg;
-    this.showModal = true;
-  }
+      if (error) {
+        this.openModal('error', error.message);
+        return;
+      }
 
-  closeModal() {
-    this.showModal = false;
-  }
+      this.openModal('success', 'Evento criado com sucesso!');
+      this.resetForm();
 
-  // Resetar formulário após envio
-  resetForm() {
-    this.nome = '';
-    this.descricao = '';
-    this.data = '';
-    this.horaInicio = '';
-    this.horaFim = '';
-    this.formato = '';
-    this.cep = '';
-    this.endereco = { rua: '', bairro: '', cidade: '', estado: '' };
-    this.categoria = '';
-    this.tipoInscricao = '';
-    this.limiteVagas = null;
-    this.emiteCertificado = false;
-    this.bannerFile = null;
-  }
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
+
+  async atualizarEvento() {
+    // Cria o payload com os nomes das colunas do Supabase (snake_case)
+    const payload = {
+      nome: this.nome,
+      descricao: this.descricao,
+      data: this.data,
+      hora_inicio: this.horaInicio,
+      hora_fim: this.horaFim,
+      categoria: this.categoria,
+      formato: this.formato,
+      tipo_inscricao: this.tipoInscricao,
+      limite_vagas: this.limiteVagas,
+      emite_certificado: this.emiteCertificado === 'true', // Converte string para boolean
+      cep: this.cep,
+      rua: this.endereco.rua,
+      bairro: this.endereco.bairro,
+      cidade: this.endereco.cidade,
+      estado: this.endereco.estado,
+    };
+
+    const { error } = await this.supabaseService.updateEventById(this.eventId!, payload);
+
+    if (error) {
+      this.openModal('error', 'Erro ao atualizar evento: ' + error.message);
+      return;
+    }
+
+    this.openModal('success', 'Evento atualizado com sucesso!');
+  }
+
+  onBannerSelected(event: any) {
+    this.bannerFile = event.target.files[0] ?? null;
+  }
+
+  resetForm() {
+    this.nome = '';
+    this.descricao = '';
+    this.data = '';
+    this.horaInicio = '';
+    this.horaFim = '';
+    this.categoria = '';
+    this.formato = '';
+    this.tipoInscricao = '';
+    this.limiteVagas = null;
+    this.emiteCertificado = 'false';
+
+    this.cep = '';
+    this.endereco = { rua: '', bairro: '', cidade: '', estado: '' };
+
+    this.bannerFile = null;
+  }
+
+  openModal(type: 'success' | 'error', message: string) {
+    this.modalType = type;
+    this.modalMessage = message;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  async buscarEndereco() {
+    if (!this.cep) return;
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${this.cep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        this.openModal('error', 'CEP não encontrado.');
+        return;
+      }
+
+      this.endereco.rua = data.logradouro ?? '';
+      this.endereco.bairro = data.bairro ?? '';
+      this.endereco.cidade = data.localidade ?? '';
+      this.endereco.estado = data.uf ?? '';
+
+    } catch (error) {
+      this.openModal('error', 'Erro ao buscar o endereço.');
+      console.error(error);
+    }
+  }
 }

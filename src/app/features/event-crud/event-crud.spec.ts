@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Profile } from './profile';
+import { EventCrud } from './event-crud';
 
-describe('Profile', () => {
-  let component: Profile;
-  let fixture: ComponentFixture<Profile>;
+describe('EventCrud', () => {
+  let component: EventCrud;
+  let fixture: ComponentFixture<EventCrud>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Profile]
+      imports: [EventCrud]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Profile);
+    fixture = TestBed.createComponent(EventCrud);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
